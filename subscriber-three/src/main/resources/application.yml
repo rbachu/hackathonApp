@@ -1,0 +1,26 @@
+
+server:
+  port: 8086
+
+spring:
+  application:
+    name: SubscriberThreeApp
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+  cloud:
+    stream:
+      default-binder: rabbit
+      default:
+        content-type: application/json
+      bindings:
+        partitionSubscriptionChannel:
+          destination: hckn.partitionExchange
+          group: myGroup
+          consumer:
+            partitioned: true
+            instance-index: 2

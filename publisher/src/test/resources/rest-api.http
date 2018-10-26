@@ -1,0 +1,9 @@
+POST http://localhost:8083/demo/postMessage
+Accept: */*
+Cache-Control: no-cache
+
+sample  demo publish 3
+
+
+###
+

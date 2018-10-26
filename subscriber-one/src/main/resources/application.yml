@@ -1,0 +1,77 @@
+
+server:
+  port: 8084
+
+spring:
+  application:
+    name: SubscriberOneApp
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+  cloud:
+    stream:
+      default-binder: rabbit
+      default:
+        content-type: application/json
+      bindings:
+        input:
+          destination: hckn.demoExchange
+          group: hckn-demo-queue
+        announcementSubscriptionChannel:
+          destination: hckn.announcementExchange
+          group: hckn-announcement-receive-queue
+        mediaSubscriptionChannel:
+          destination: hckn.announcementExchange
+          group: hckn-media-receive-queue
+        registrationSubscriptionChannel:
+          destination: hckn.registrationExchange
+          group: hckn-registration-receive-queue
+        organizerSubscriptionChannel:
+          destination: hckn.registrationExchange
+          group: hckn-organizer-registration-receive-queue
+        ideaSubscriptionChannel:
+          destination: hckn.ideaExchange
+          group: hckn-idea-receive-queue
+        processedIdeaSubmissionChannel:
+          destination: hckn.processed.ideaExchange
+        processedIdeaSubscriptionChannel:
+          destination: hckn.processed.ideaExchange
+          group: hckn-processed-idea-receive-queue
+        partitionSubscriptionChannel:
+          destination: hckn.partitionExchange
+          group: myGroup
+          consumer:
+            partitioned: true
+            instance-index: 0
+      rabbit:
+        bindings:
+          announcementSubscriptionChannel:
+            consumer:
+              exchangeType: fanout
+          mediaSubscriptionChannel:
+            consumer:
+              exchangeType: fanout
+          registrationSubscriptionChannel:
+            consumer:
+              exchangeType: topic
+              bindingRoutingKey: "hckn.employee.*"
+          organizerSubscriptionChannel:
+            consumer:
+              exchangeType: topic
+              bindingRoutingKey: "hckn.employee.#"
+          ideaSubscriptionChannel:
+            consumer:
+              exchangeType: direct
+              bindingRoutingKey: "hckn.raw.idea"
+          processedIdeaSubmissionChannel:
+            producer:
+              exchangeType: direct
+              routingKeyExpression: "'hckn.processed.idea'"
+          processedIdeaSubscriptionChannel:
+            consumer:
+              exchangeType: direct
+              bindingRoutingKey: "hckn.processed.idea"

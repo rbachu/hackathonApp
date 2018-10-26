@@ -1,0 +1,13 @@
+GET http://localhost:8083/demo/welcome
+
+###
+
+POST http://localhost:8083/demo/postMessage/
+Content-Type: application/json
+
+{
+ "firstName" : "Raghav",
+  "lastName" : "Kumar"
+}
+
+###

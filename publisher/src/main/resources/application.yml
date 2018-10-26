@@ -1,0 +1,47 @@
+
+server:
+  port: 8083
+
+spring:
+  application:
+    name: PublisherApp
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+  cloud:
+    stream:
+      default-binder: rabbit
+      default:
+        content-type: application/json
+      bindings:
+        output:
+          destination: hckn.demoExchange
+        announcementSubmissionChannel:
+          destination: hckn.announcementExchange
+        registrationSubmissionChannel:
+          destination: hckn.registrationExchange
+        ideaSubmissionChannel:
+          destination: hckn.ideaExchange
+        partitionSubmissionChannel:
+          destination: hckn.partitionExchange
+          producer:
+            partition-key-expression: payload.word
+            partition-count: 3
+            required-groups: myGroup
+      rabbit:
+        bindings:
+          announcementSubmissionChannel:
+            producer:
+              exchangeType: fanout
+          registrationSubmissionChannel:
+            producer:
+              exchangeType: topic
+              routingKeyExpression: "'hckn.employee.xyz'"
+          ideaSubmissionChannel:
+            producer:
+              exchangeType: direct
+              routingKeyExpression: "'hckn.raw.idea'"

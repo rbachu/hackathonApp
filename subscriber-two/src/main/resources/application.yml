@@ -1,0 +1,35 @@
+
+server:
+  port: 8085
+
+spring:
+  application:
+    name: SubscriberTwoApp
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+  cloud:
+    stream:
+      default-binder: rabbit
+      default:
+        content-type: application/json
+      bindings:
+        processedIdeaSubscriptionChannel:
+          destination: hckn.processed.ideaExchange
+          group: hckn-processed-idea-receive-queue
+        partitionSubscriptionChannel:
+          destination: hckn.partitionExchange
+          group: myGroup
+          consumer:
+            partitioned: true
+            instance-index: 1
+      rabbit:
+        bindings:
+          processedIdeaSubscriptionChannel:
+            consumer:
+              exchangeType: direct
+              bindingRoutingKey: "hckn.processed.idea"
