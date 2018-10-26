@@ -27,3 +27,8 @@ hs_err_pid*
 .settings/
 .idea
 .settings
+.project
+*.iml
+*.ipr
+*.iws
+.classpath
